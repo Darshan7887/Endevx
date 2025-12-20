@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with Video Previews</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Fugaz One", sans-serif;
+      background: #f6f6f9;
+    }
+
+    /* Background video */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Logo */
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar .logo img {
+      width: 80px;
+      height: 55px;
+      border-radius: 6px;
+    }
+    .navbar .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Menu */
+    .navbar .menu {
+      display: flex;
+      gap: 25px;
+      position: relative;
+    }
+    .navbar .menu a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 5px 8px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .menu a:hover {
+      color: #ffcc00;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      filter: none !important;
+    }
+
+    /* Blur other options */
+    .navbar .menu:hover a:not(:hover) {
+      filter: blur(2px) brightness(70%);
+    }
+
+    /* Right side */
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .reward {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    .reward img {
+      width: 20px;
+      height: 20px;
+    }
+    .profile img {
+      width: 70px;
+      height: 55px;
+      border-radius: 50%;
+      border: 0px solid #fff;
+    }
+
+    /* Content */
+    .content {
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      transition: filter 0.3s ease;
+    }
+    .menu:hover ~ .content {
+      filter: blur(5px);
+    }
+
+    /* Video preview */
+    .video-preview {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 200px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      background: #000;
+      z-index: 20;
+    }
+    .video-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .navbar .menu a:hover .video-preview {
+      opacity: 1;
+    }
+    /* Translucent game box */
+.game-box {
+  margin: 40px auto;
+  width: 90%;            /* wider, almost full */
+  max-width: 1200px;     /* prevent extreme stretching on large screens */
+  height: 500px;         /* fixed height similar to red box */
+  background: rgba(255, 255, 255, 0.15);
+  padding: 40px;
+  border-radius: 16px;
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+
+  display: flex;         /* to center items nicely */
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+#cups {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 40px 0;
+}
+
+.cup {
+  font-size: 100px;   /* make cups bigger */
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+
+.cup.shuffling {
+  transform: translateX(50px) rotate(20deg);
+}
+
+#result {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+#scoreboard {
+  margin: 15px 0;
+  font-size: 18px;
+}
+
+  </style>
+  <link rel="stylesheet" href="gamesbg.html">
+</head>
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="twilight-forest-pixel-moewalls-com.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+
+    <div class="menu">
+      <a href="front.html">
+        Home
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="challen.html">
+        Challenges
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix12.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="chal.html">
+        Games
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="Less.html">
+        Lessons
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix5.mov" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="rewards.html">
+        Rewards
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="rewards.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="help.html">
+        Help
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="help.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+    </div>
+
+    <div class="right">
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Gem">
+        <span>0</span>
+      </div>
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/138/138281.png" alt="Coin">
+        <span>0</span>
+      </div>
+      <div class="profile">
+        <img src="dp-cactus-20.png" alt="User">
+      </div>
+    </div>
+  </div>
+    <!-- Translucent Game Box -->
+  <div class="game-box">
+    <h2>Find the Ball 🎩🥎</h2>
+    <p>Watch the shuffle and guess under which cup the ball is hidden!</p>
+
+    <div id="cups">
+      <div class="cup" onclick="guessCup(0)">🥛</div>
+      <div class="cup" onclick="guessCup(1)">🥛</div>
+      <div class="cup" onclick="guessCup(2)">🥛</div>
+    </div>
+
+    <p id="result"></p>
+
+    <div id="scoreboard">
+      ✅ Wins: <span id="wins">0</span> | ❌ Losses: <span id="losses">0</span>
+    </div>
+
+    <button onclick="resetGame()">🔄 Play Again</button>
+  </div>
+
+
+</body>
+<script>
+let ballPosition;
+let gameActive = false;
+let wins = 0;
+let losses = 0;
+
+function resetGame() {
+  ballPosition = Math.floor(Math.random() * 3);
+  document.getElementById("result").textContent = "Shuffling cups...";
+  gameActive = false;
+
+  shuffleAnimation(() => {
+    document.getElementById("result").textContent = "Choose a cup!";
+    gameActive = true;
+  });
+}
+
+function shuffleAnimation(callback) {
+  let cups = document.querySelectorAll(".cup");
+  let shuffleCount = 5;
+  let count = 0;
+
+  let shuffleInterval = setInterval(() => {
+    let i = Math.floor(Math.random() * cups.length);
+    cups[i].classList.add("shuffling");
+
+    setTimeout(() => {
+      cups[i].classList.remove("shuffling");
+    }, 400);
+
+    count++;
+    if (count >= shuffleCount) {
+      clearInterval(shuffleInterval);
+      setTimeout(callback, 500);
+    }
+  }, 600);
+}
+
+function guessCup(choice) {
+  if (!gameActive) return;
+
+  if (choice === ballPosition) {
+    document.getElementById("result").textContent = "🎉 Correct! The ball was here!";
+    wins++;
+  } else {
+    document.getElementById("result").textContent = "❌ Wrong! The ball was under cup " + (ballPosition + 1);
+    losses++;
+  }
+  updateScoreboard();
+  gameActive = false;
+}
+
+function updateScoreboard() {
+  document.getElementById("wins").textContent = wins;
+  document.getElementById("losses").textContent = losses;
+}
+
+resetGame();
+</script>
+
+</html>

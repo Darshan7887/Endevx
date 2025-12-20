@@ -1,0 +1,43 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# OneDrive / Windows
+~$*
+*.lnk
+
+# Node / Installers
+node_modules/
+node-*.msi
+npm-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Large media (ignored by default)
+*.mp4
+*.mov
+*.webm
+*.avi
+
+# Images (keep only curated ones)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# Temp / test files
+temp*
+test*
+*.log
+
+# Build / dist
+dist/
+build/

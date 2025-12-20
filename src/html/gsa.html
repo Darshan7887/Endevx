@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with Video Previews</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Fugaz one", sans-serif;
+      background: #f6f6f9;
+    }
+
+    /* Background video */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Logo */
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar .logo img {
+      width: 80px;
+      height: 55px;
+      border-radius: 6px;
+    }
+    .navbar .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Menu */
+    .navbar .menu {
+      display: flex;
+      gap: 25px;
+      position: relative;
+    }
+    .navbar .menu a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 5px 8px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .menu a:hover {
+      color: #ffcc00;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      filter: none !important;
+    }
+
+    /* Blur other options */
+    .navbar .menu:hover a:not(:hover) {
+      filter: blur(2px) brightness(70%);
+    }
+
+    /* Right side */
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .reward {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    .reward img {
+      width: 20px;
+      height: 20px;
+    }
+    .profile img {
+      width: 70px;
+      height: 55px;
+      border-radius: 50%;
+      border: 0px solid #fff;
+    }
+
+    /* Content */
+    .content {
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      transition: filter 0.3s ease;
+    }
+    .menu:hover ~ .content {
+      filter: blur(5px);
+    }
+
+    /* Video preview */
+    .video-preview {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 200px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      background: #000;
+      z-index: 20;
+    }
+    .video-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .navbar .menu a:hover .video-preview {
+      opacity: 1;
+    }
+    .lesson-box {
+  margin: 60px auto;
+  width: 85%;             /* make it wide */
+  min-height: 350px;      /* make it taller */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+}
+.lesson-box button {
+  margin: 15px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #4b2aad;
+  color: white;
+  transition: 0.3s;
+}
+.lesson-box button:hover {
+  background: #ffcc00;
+  color: #000;
+}
+
+  </style>
+ 
+</head>
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="pok.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+
+    <div class="menu">
+      <a href="front.html">
+        Home
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="challen.html">
+        Challenges
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix12.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="chal.html">
+        Games
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="Less.html">
+        Lessons
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix5.mov" type="video/mp4">
+          </video>
+        </div>
+        
+      </a>
+      <a href="rewards.html">
+        Rewards
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="rewards.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="help.html">
+        Help
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="help.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+    </div>
+
+    <div class="right">
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Gem">
+        <span>0</span>
+      </div>
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/138/138281.png" alt="Coin">
+        <span>0</span>
+      </div>
+      <div class="profile">
+        <img src="dp-cactus-20.png" alt="User">
+      </div>
+    </div>
+  </div>
+  <div class="lesson-box">
+    <h2>Lesson 2: Golden Words & Sentences</h2>
+    <p id="sentence">Click "Start Lesson" to begin!</p>
+    <button id="startBtn">Start Lesson</button>
+    <button id="speakBtn" disabled>🎤 Speak</button>
+    <p id="feedback"></p>
+    <p>Progress: <span id="progress">0</span>/20 ⭐</p>
+  </div>
+</body>
+<script>
+    const sentences = [
+      "Hello", "Good morning", "Good night", "How are you", "I am fine",
+      "Thank you", "Sorry", "Please", "Excuse me", "Goodbye",
+      "May I come in", "Sit down", "Stand up", "Let's go", "I want water",
+      "I want food", "I am happy", "I am sad", "I want to play", "See you soon"
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+
+    const sentenceEl = document.getElementById("sentence");
+    const progressEl = document.getElementById("progress");
+    const feedbackEl = document.getElementById("feedback");
+    const startBtn = document.getElementById("startBtn");
+    const speakBtn = document.getElementById("speakBtn");
+
+    // Start Lesson
+    startBtn.addEventListener("click", () => {
+      currentIndex = 0;
+      score = 0;
+      progressEl.textContent = "0";
+      showSentence();
+      speakBtn.disabled = false;
+    });
+
+    // Show sentence + speak it
+    function showSentence() {
+      const text = sentences[currentIndex];
+      sentenceEl.textContent = text;
+      feedbackEl.textContent = "";
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      speechSynthesis.speak(utterance);
+    }
+
+    // Speech recognition setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    speakBtn.addEventListener("click", () => {
+      recognition.start();
+    });
+
+    recognition.onresult = (event) => {
+      const spoken = event.results[0][0].transcript.toLowerCase();
+      const expected = sentences[currentIndex].toLowerCase();
+
+      if (spoken.includes(expected)) {
+        feedbackEl.textContent = "✅ Correct!";
+        score++;
+        progressEl.textContent = score;
+      } else {
+        feedbackEl.textContent = "❌ Try again! You said: " + spoken;
+        return; // don't move to next
+      }
+
+      // Move to next sentence
+      currentIndex++;
+      if (currentIndex < sentences.length) {
+        setTimeout(showSentence, 1000);
+      } else {
+        setTimeout(() => {
+          sentenceEl.textContent = "🎉 Congratulations! You completed Lesson 2.";
+          feedbackEl.textContent = "✨ New Challenge Unlocked!";
+          speakBtn.disabled = true;
+        }, 500);
+      }
+    };
+  </script>
+</html>

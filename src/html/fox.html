@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Navbar with Game</title>
+ <style>
+    body {
+      margin: 0;
+      font-family: "Fugaz One", sans-serif;
+      background: #f6f6f9;
+      overflow-x: hidden;
+    }
+
+    /* Background video */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+    .navbar .logo { display: flex; align-items: center; gap: 8px; }
+    .navbar .logo img { width: 80px; height: 55px; border-radius: 6px; }
+    .navbar .logo span { font-size: 1.2rem; font-weight: bold; }
+    .navbar .menu { display: flex; gap: 25px; position: relative; }
+    .navbar .menu a {
+      text-decoration: none; color: #fff; font-weight: 500; font-size: 0.95rem;
+      padding: 5px 8px; position: relative; transition: all 0.3s ease;
+    }
+    .navbar .menu a:hover {
+      color: #ffcc00; background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+    }
+    .navbar .menu:hover a:not(:hover) { filter: blur(2px) brightness(70%); }
+    .navbar .right { display: flex; align-items: center; gap: 15px; }
+    .reward { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+    .reward img { width: 20px; height: 20px; }
+    .profile img { width: 70px; height: 55px; border-radius: 50%; }
+
+    /* Game Section */
+    .game {
+      background: #fffbeac1;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+      position: relative;
+    }
+    .story {
+      flex: 1;
+      padding: 20px;
+    }
+    .story h1 { text-align: center; color: #ff6600; }
+    .choices button {
+      margin: 8px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #ffcc80;
+      cursor: pointer;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+    .choices button:hover { background: #ffa726; transform: scale(1.05); }
+    #status { margin-top: 15px; font-size: 16px; color: #444; }
+    #castleWin { font-size: 20px; font-weight: bold; color: green; display: none; }
+
+    .flowchart {
+      flex: 1;
+      position: relative;
+      background: rgba(227,242,253,0.7);
+      border-radius: 12px;
+      padding: 10px;
+      overflow: hidden;
+    }
+    svg { width: 100%; height: 100%; }
+    .node circle {
+      fill: rgba(144,202,249,0.6);
+      stroke: #1976d2;
+      stroke-width: 2px;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.5s ease;
+    }
+    .node.show circle {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .node text { font-size: 18px; text-anchor: middle; dominant-baseline: middle; fill: #000; }
+    .node.glow circle {
+      fill: rgba(255,235,59,0.8);
+      stroke: #f57c00;
+      stroke-width: 3px;
+      filter: drop-shadow(0 0 8px orange);
+    }
+    .link { stroke: #90a4ae; stroke-width: 2px; opacity:0; transition: opacity 0.5s ease; }
+    .link.show { opacity: 1; }
+
+    /* Fox emoji */
+    .fox {
+      position: absolute;
+      font-size: 28px;
+      transition: all 1s ease;
+    }
+    .fox.jump { animation: jump 0.6s ease; }
+    @keyframes jump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0); }
+    }
+ </style>
+</head>
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="red-moon-rise-pixel-moewalls-com.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+    <div class="menu">
+      <a href="front.html">Home</a>
+      <a href="challen.html">Challenges</a>
+      <a href="chal.html">Games</a>
+      <a href="Less.html">Lessons</a>
+      <a href="rewards.html">Rewards</a>
+      <a href="help.html">Help</a>
+    </div>
+    <div class="right">
+      <div class="reward"><img src="https://cdn-icons-png.flaticon.com/512/616/616490.png"><span>0</span></div>
+      <div class="reward"><img src="https://cdn-icons-png.flaticon.com/512/138/138281.png"><span>0</span></div>
+      <div class="profile"><img src="dp-cactus-20.png" alt="User"></div>
+    </div>
+  </div>
+
+  <!-- Game Section -->
+  <div class="game">
+    <div class="story">
+      <h1>🦊 Fox’s Adventure</h1>
+      <p id="narrative">Fox wants to move! Say “go” or press button.</p>
+      <div class="choices" id="choices">
+        <button onclick="makeChoice('go')">Go</button>
+      </div>
+      <p id="status">🎙️ Say your choice...</p>
+      <p id="castleWin">🏆 The Castle glows golden! You win!</p>
+    </div>
+
+    <div class="flowchart">
+      <svg id="chart" viewBox="0 0 600 400">
+        <!-- Start -->
+        <g class="node show" id="start" transform="translate(300,50)">
+          <circle r="25"></circle>
+          <text>Start</text>
+        </g>
+        <!-- Castle -->
+        <g class="node" id="castle" transform="translate(300,350)">
+          <circle r="30"></circle>
+          <text>🏰</text>
+        </g>
+      </svg>
+      <div class="fox" id="fox" style="top:30px; left:290px;">🦊</div>
+    </div>
+  </div>
+
+  <script>
+    let step = "start";
+    const narrative = document.getElementById("narrative");
+    const choicesDiv = document.getElementById("choices");
+    const fox = document.getElementById("fox");
+    const castleWin = document.getElementById("castleWin");
+    const chart = document.getElementById("chart");
+
+    function addNode(id, x, y, icon) {
+      if (!document.getElementById(id)) {
+        let g = document.createElementNS("http://www.w3.org/2000/svg","g");
+        g.setAttribute("class","node");
+        g.setAttribute("id",id);
+        g.setAttribute("transform",`translate(${x},${y})`);
+        g.innerHTML = `<circle r="22"></circle><text>${icon}</text>`;
+        chart.appendChild(g);
+        setTimeout(()=>g.classList.add("show"),50);
+      }
+    }
+
+    function glow(nodeId) {
+      let node = document.getElementById(nodeId);
+      if (node) node.classList.add("glow","show");
+    }
+
+    function moveFox(x,y) {
+      fox.style.left = (x-10)+"px";
+      fox.style.top = (y-10)+"px";
+      fox.classList.add("jump");
+      setTimeout(()=>fox.classList.remove("jump"),600);
+    }
+
+    function makeChoice(choice) {
+      if (step==="start" && choice==="go") {
+        narrative.textContent="🌳 Forest: Owl asks, what sound does 's' make?";
+        choicesDiv.innerHTML=`<button onclick="makeChoice('sss')">Say 'sss' 🐍</button>`;
+        addNode("forest",150,150,"🌳");
+        moveFox(150,150);
+        step="forest";
+      }
+      else if (step==="forest" && choice==="sss") {
+        narrative.textContent="🌊 River: Count 3 stones!";
+        choicesDiv.innerHTML=`<button onclick="makeChoice('123')">Say 'one, two, three'</button>`;
+        addNode("river",450,150,"🌊");
+        moveFox(450,150);
+        step="river";
+      }
+      else if (step==="river" && choice==="123") {
+        narrative.textContent="🦋 Meadow: Riddle – Which is bigger, tree or flower?";
+        choicesDiv.innerHTML=`<button onclick="makeChoice('tree')">Say 'tree'</button>`;
+        addNode("meadow",200,220,"🦋");
+        moveFox(200,220);
+        step="meadow";
+      }
+      else if (step==="meadow" && choice==="tree") {
+        narrative.textContent="⛰️ Mountain: What is 2 + 3 ?";
+        choicesDiv.innerHTML=`<button onclick="makeChoice('five')">Say 'five'</button>`;
+        addNode("mountain",400,220,"⛰️");
+        moveFox(400,220);
+        step="mountain";
+      }
+      else if (step==="mountain" && choice==="five") {
+        narrative.textContent="🏰 Castle: Say the sentence 'The fox can win.'";
+        choicesDiv.innerHTML=`<button onclick="makeChoice('sentence')">Say 'The fox can win.'</button>`;
+        addNode("castlePath",300,300,"⛰️");
+        moveFox(300,300);
+        step="castle";
+      }
+      else if (step==="castle" && choice==="sentence") {
+        glow("castle");
+        narrative.textContent="🏆 Fox says: 'The fox can win.' He made it!";
+        choicesDiv.innerHTML=`<button onclick="location.reload()">🔁 Play Again</button>`;
+        moveFox(300,350);
+        castleWin.style.display="block";
+      }
+    }
+
+    // 🎙️ Voice Recognition
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.lang = "en-US";
+      recognition.onresult = function(event) {
+        const transcript = event.results[event.results.length-1][0].transcript.trim().toLowerCase();
+        document.getElementById("status").textContent = "🎙️ Heard: " + transcript;
+
+        if (transcript.includes("go")) makeChoice("go");
+        else if (transcript.includes("sss")) makeChoice("sss");
+        else if (transcript.includes("one") && transcript.includes("two") && transcript.includes("three")) makeChoice("123");
+        else if (transcript.includes("tree")) makeChoice("tree");
+        else if (transcript.includes("five")) makeChoice("five");
+        else if (transcript.includes("the fox can win")) makeChoice("sentence");
+      };
+      recognition.start();
+    }
+  </script>
+</body>
+</html>

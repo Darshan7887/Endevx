@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with Video Previews</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Fugaz One", sans-serif;
+      background: #f6f6f9;
+    }
+
+    /* Background video */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Logo */
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar .logo img {
+      width: 80px;
+      height: 55px;
+      border-radius: 6px;
+    }
+    .navbar .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Menu */
+    .navbar .menu {
+      display: flex;
+      gap: 25px;
+      position: relative;
+    }
+    .navbar .menu a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 5px 8px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .menu a:hover {
+      color: #ffcc00;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      filter: none !important;
+    }
+
+    /* Blur other options */
+    .navbar .menu:hover a:not(:hover) {
+      filter: blur(2px) brightness(70%);
+    }
+
+    /* Right side */
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .reward {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    .reward img {
+      width: 20px;
+      height: 20px;
+    }
+    .profile img {
+      width: 70px;
+      height: 55px;
+      border-radius: 50%;
+      border: 0px solid #fff;
+    }
+    /* Profile Sidebar */
+    .profile-sidebar {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 300px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 200;
+      color: #fff;
+    }
+    .profile-sidebar.active {
+      right: 0;
+    }
+    .profile-sidebar h2 {
+      margin-top: 0;
+      font-family: "Fugaz One", sans-serif;
+    }
+    .profile-sidebar p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    .profile-sidebar .close-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Content */
+    .content {
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      transition: filter 0.3s ease;
+    }
+    .menu:hover ~ .content {
+      filter: blur(5px);
+    }
+
+    /* Video preview */
+    .video-preview {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 200px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      background: #000;
+      z-index: 20;
+    }
+    .video-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .navbar .menu a:hover .video-preview {
+      opacity: 1;
+    }
+/* ---------- Alphabet overlay (big translucent box) ---------- */
+.alphabet-overlay {
+  margin: 14px auto;
+  max-width: calc(100% - 160px);
+  min-height: 360px;
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  justify-content: space-between;
+  color: #111;
+  z-index: 5; /* below navbar (which in your code had z-index:10) */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+/* Card with letter + image */
+.alphabet-card{
+  flex: 0 1 46%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background: rgba(255,255,255,0.38);
+  border-radius: 12px;
+  padding: 18px;
+  min-height: 290px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  text-align:center;
+}
+
+.letter-large{
+  font-size: 110px;
+  font-weight: 800;
+  color: #2b2b2b;
+  letter-spacing: 6px;
+  margin: 6px 0;
+}
+
+.word-text{
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.word-image{
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.8);
+  padding: 6px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+}
+
+/* Right side controls */
+.alphabet-right{
+  flex: 0 1 40%;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+  padding-left: 8px;
+}
+
+.alphabet-score{
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.alphabet-controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.alpha-btn{
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #37a34a;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.alpha-btn:hover{ transform: translateY(-2px); }
+
+/* small hint */
+.alphabet-hint{ color: rgba(0,0,0,0.6); font-size: 13px; margin-top: 6px; }
+
+/* ---------- Celebration overlay (centered) ---------- */
+.celebration{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%) scale(0.9);
+  display: none; /* shown by JS */
+  align-items:center;
+  justify-content:center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.celebration-card{
+  min-width: 420px;
+  max-width: 85vw;
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px;
+  padding: 26px 28px;
+  text-align:center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.celebration-card h1{
+  font-size: 48px;
+  margin: 6px 0;
+  color: #f5a623;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.12);
+}
+
+.celebration-card p{
+  font-size: 20px;
+  margin: 4px 0 0;
+  color: #333;
+}
+
+/* confetti items container (absolute inside #celebration) */
+.confetti-container{
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* single confetti */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  opacity: 0.95;
+  border-radius: 2px;
+  transform-origin: center;
+  animation: confetti-fall 1200ms linear forwards;
+}
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg) scale(1); opacity:1; }
+  100% { transform: translateY(24vh) rotate(520deg) scale(0.9); opacity:0; }
+}
+
+/* small pop animation for card */
+@keyframes pop {
+  0% { transform: translate(-50%,-50%) scale(0.86); opacity: 0; }
+  60% { transform: translate(-50%,-50%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+}
+.celebration.show { display:flex; animation: pop 300ms ease both; }
+
+  </style>
+  
+</head>
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="r12.mov" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+
+    <div class="menu">
+      <a href="front.html">
+        Home
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="#">
+        Challenges
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix12.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="chal.html">
+        Games
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="Less.html">
+        Lessons
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix5.mov" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="rewards.html">
+        Rewards
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="rewards.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="help.html">
+        Help
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="help.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+    </div>
+
+    <div class="right">
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Gem">
+        <span>0</span>
+      </div>
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/138/138281.png" alt="Coin">
+        <span>0</span>
+      </div>
+      <div class="profile">
+        <img src="dp-cactus-20.png" alt="User">
+      </div>
+    </div>
+  </div>
+  <!-- Sidebar for Profile -->
+<div id="profileSidebar" class="profile-sidebar">
+  <span class="close-btn" onclick="toggleProfile()">X</span>
+  <h2>User Profile</h2>
+  <p><strong>Name:</strong> <span id="profileName"></span></p>
+  <p><strong>Age:</strong> <span id="profileAge"></span></p>
+  <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+</div>
+
+    </div>
+  </div>
+  <!-- START: Alphabet learning overlay (ADD BELOW NAVBAR) -->
+<div id="alphabetOverlay" class="alphabet-overlay" aria-live="polite">
+  <div class="alphabet-card" id="alphabetCard">
+    <div id="letterLarge" class="letter-large">A</div>
+    <div id="wordText" class="word-text">Apple</div>
+    <img id="wordImage" class="word-image" src="https://img.icons8.com/color/96/apple.png" alt="Apple">
+  </div>
+
+  <div class="alphabet-right">
+    <div id="alphabetScore" class="alphabet-score">Score: 0</div>
+
+    <div class="alphabet-controls">
+      <button id="hearBtn" class="alpha-btn">🔊 Hear</button>
+      <button id="speakBtn" class="alpha-btn">🎤 Speak</button>
+      <button id="manualNextBtn" class="alpha-btn">➡ Next</button>
+    </div>
+
+    <div class="alphabet-hint">Say the word clearly. Correct → auto next.</div>
+  </div>
+</div>
+
+<!-- Celebration overlay (hidden by default) -->
+<div id="celebration" class="celebration" aria-hidden="true">
+  <div id="confettiContainer" class="confetti-container" aria-hidden="true"></div>
+  <div class="celebration-card">
+    <h1 id="celebrationTitle">Great Job!</h1>
+    <p id="celebrationMsg">You said Apple correctly.</p>
+  </div>
+</div>
+<!-- END: Alphabet learning overlay -->
+
+<script>
+   const leftBoxes = document.querySelectorAll(".left-container .glass-box");
+    const infoContent = document.getElementById("info-content");
+    let locked = false; // track click lock
+ function toggleProfile() {
+    document.getElementById("profileSidebar").classList.toggle("active");
+  }
+
+  // ✅ Make profile image open sidebar
+  document.querySelector(".profile img").addEventListener("click", toggleProfile);
+    leftBoxes.forEach(box => {
+      // Show info on hover (only if not locked)
+      box.addEventListener("mouseenter", () => {
+        if (!locked) {
+          infoContent.innerHTML = `<h2>${box.textContent}</h2><p>${box.dataset.info}</p>`;
+        }
+      });
+
+      // Reset when mouse leaves (only if not locked)
+      box.addEventListener("mouseleave", () => {
+        if (!locked) {
+          infoContent.innerHTML = `<h2>Hover or Click a Box</h2><p>The info will appear here.</p>`;
+        }
+      });
+
+      // Lock info on click
+      box.addEventListener("click", () => {
+        locked = true;
+        infoContent.innerHTML = `<h2>${box.textContent} (Locked)</h2><p>${box.dataset.info}</p>`;
+      });
+    });
+  (function(){
+  // A-Z dataset (icons8 links)
+  const data = [
+    { letter: "A", word: "Apple", img: "https://img.icons8.com/color/96/apple.png" },
+    { letter: "B", word: "Ball", img: "https://img.icons8.com/color/96/football2--v1.png" },
+    { letter: "C", word: "Cat", img: "https://img.icons8.com/color/96/cat.png" },
+    { letter: "D", word: "Dog", img: "https://img.icons8.com/color/96/dog.png" },
+    { letter: "E", word: "Elephant", img: "https://img.icons8.com/color/96/elephant.png" },
+    { letter: "F", word: "Fish", img: "https://img.icons8.com/color/96/fish.png" },
+    { letter: "G", word: "Grapes", img: "https://img.icons8.com/color/96/grapes.png" },
+    { letter: "H", word: "House", img: "https://img.icons8.com/color/96/house.png" },
+    { letter: "I", word: "Ice", img: "https://img.icons8.com/color/96/ice-cube.png" },
+    { letter: "J", word: "Juice", img: "https://img.icons8.com/color/96/orange-juice.png" },
+    { letter: "K", word: "Kite", img: "https://img.icons8.com/color/96/kite.png" },
+    { letter: "L", word: "Lion", img: "https://img.icons8.com/color/96/lion.png" },
+    { letter: "M", word: "Monkey", img: "https://img.icons8.com/color/96/monkey.png" },
+    { letter: "N", word: "Nest", img: "https://img.icons8.com/color/96/nest.png" },
+    { letter: "O", word: "Orange", img: "https://img.icons8.com/color/96/orange.png" },
+    { letter: "P", word: "Pen", img: "https://img.icons8.com/color/96/pen.png" },
+    { letter: "Q", word: "Queen", img: "https://img.icons8.com/color/96/crown.png" },
+    { letter: "R", word: "Rabbit", img: "https://img.icons8.com/color/96/rabbit.png" },
+    { letter: "S", word: "Sun", img: "https://img.icons8.com/color/96/sun.png" },
+    { letter: "T", word: "Tree", img: "https://img.icons8.com/color/96/deciduous-tree.png" },
+    { letter: "U", word: "Umbrella", img: "https://img.icons8.com/color/96/umbrella.png" },
+    { letter: "V", word: "Van", img: "https://img.icons8.com/color/96/van.png" },
+    { letter: "W", word: "Watch", img: "https://img.icons8.com/color/96/watch.png" },
+    { letter: "X", word: "Xylophone", img: "https://img.icons8.com/color/96/xylophone.png" },
+    { letter: "Y", word: "Yak", img: "https://img.icons8.com/color/96/yak.png" },
+    { letter: "Z", word: "Zebra", img: "https://img.icons8.com/color/96/zebra.png" }
+  ];
+
+  // DOM refs
+  const letterLarge = document.getElementById('letterLarge');
+  const wordText = document.getElementById('wordText');
+  const wordImage = document.getElementById('wordImage');
+  const scoreEl = document.getElementById('alphabetScore');
+
+  const hearBtn = document.getElementById('hearBtn');
+  const speakBtn = document.getElementById('speakBtn');
+  const manualNextBtn = document.getElementById('manualNextBtn');
+
+  const celebration = document.getElementById('celebration');
+  const celebrationMsg = document.getElementById('celebrationMsg');
+  const confettiContainer = document.getElementById('confettiContainer');
+
+  let currentIndex = 0;
+  let score = 0;
+
+  // show card
+  function updateCard(){
+    const item = data[currentIndex];
+    letterLarge.textContent = item.letter;
+    wordText.textContent = item.word;
+    wordImage.src = item.img;
+    wordImage.alt = item.word;
+  }
+
+  // Text-to-speech playback
+  function speakWord(word){
+    try {
+      const u = new SpeechSynthesisUtterance(word);
+      u.rate = 0.9;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch (e) { console.warn('TTS not available', e); }
+  }
+
+  // Celebration UI with little confetti
+  function showCelebration(correctWord){
+    celebrationMsg.textContent = `You said ${correctWord} correctly.`;
+    celebration.classList.add('show');
+    celebration.setAttribute('aria-hidden', 'false');
+
+    // create confetti pieces
+    confettiContainer.innerHTML = '';
+    const colors = ['#F44336','#FFC107','#4CAF50','#2196F3','#9C27B0','#FF5722'];
+    for(let i=0;i<20;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.background = colors[i % colors.length];
+      c.style.left = (10 + Math.random()*80) + '%';
+      c.style.top = (5 + Math.random()*10) + '%';
+      c.style.transform = `rotate(${Math.random()*360}deg)`;
+      c.style.animationDuration = (900 + Math.random()*700) + 'ms';
+      c.style.opacity = 0.95;
+      confettiContainer.appendChild(c);
+    }
+
+    // auto hide after 1.6s
+    setTimeout(()=> {
+      celebration.classList.remove('show');
+      celebration.setAttribute('aria-hidden','true');
+      confettiContainer.innerHTML = '';
+    }, 1600);
+  }
+
+  // move to next card (or finish)
+  function goNext(){
+    if(currentIndex < data.length - 1){
+      currentIndex++;
+      updateCard();
+    } else {
+      // final celebration / finished message
+      showCelebration(data[currentIndex].word);
+      setTimeout(() => {
+        alert(`🎉 Finished! Your score: ${score} / ${data.length}`);
+      }, 300);
+    }
+  }
+
+  // Hook up Hear button
+  hearBtn.addEventListener('click', () => {
+    speakWord(data[currentIndex].word);
+  });
+
+  // Hook up manual next button
+  manualNextBtn.addEventListener('click', goNext);
+
+  // Speech recognition setup
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  if(SpeechRecognition){
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 3;
+
+    recognition.onresult = function(evt){
+      const spoken = evt.results[0][0].transcript.toLowerCase().trim();
+      const target = data[currentIndex].word.toLowerCase();
+      // simple check: includes target word OR exact match
+      if(spoken.includes(target) || target.includes(spoken)){
+        // correct
+        score++;
+        scoreEl.textContent = `Score: ${score}`;
+        showCelebration(data[currentIndex].word);
+
+        // small delay to let celebration show then next
+        setTimeout(goNext, 900);
+      } else {
+        // wrong - encourage to try again (on-screen feedback)
+        // small visual cue (shake card) — quick CSS fallback: change background briefly
+        const origBg = wordText.style.background;
+        wordText.style.transition = 'transform 200ms';
+        wordText.style.transform = 'translateX(-6px)';
+        setTimeout(()=> wordText.style.transform = 'translateX(6px)', 180);
+        setTimeout(()=> wordText.style.transform = 'translateX(0)', 360);
+      }
+    };
+
+    recognition.onerror = function(evt){
+      console.warn('Speech recognition error', evt);
+    };
+
+    recognition.onend = function(){ /* auto end, user can click speak again */ };
+  } else {
+    // Browser does not support speech recognition
+    speakBtn.disabled = true;
+    speakBtn.title = "Speech recognition not supported in this browser.";
+    console.warn('SpeechRecognition not supported.');
+  }
+
+  // Hook up Speak button
+  speakBtn.addEventListener('click', () => {
+    if(!recognition){
+      alert('Speech recognition not supported in this browser. Use Chrome on localhost or HTTPS.');
+      return;
+    }
+    try {
+      recognition.start();
+    } catch (e) {
+      // sometimes start throws if called twice quickly
+      console.warn('recognition start error', e);
+    }
+  });
+
+  // initialize first card & score
+  updateCard();
+  scoreEl.textContent = `Score: ${score}`;
+
+  // Optional: auto-play first word once loaded (uncomment if desired)
+  // window.addEventListener('load', ()=> speakWord(data[currentIndex].word));
+})();
+
+</script>
+</html>

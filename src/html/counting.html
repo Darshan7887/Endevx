@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainBerry - Counting Game</title>
+  
+  <!-- Google Fonts -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+<style>
+  body {
+  margin: 0;
+  font-family: "Fugaz one", sans-serif;
+  background: #f6f6f9;
+  text-align: center;
+}
+
+/* Background video */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(75, 42, 173, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  color: #fff;
+  position: relative;
+  z-index: 10;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.navbar .logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+}
+.navbar .logo span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.navbar .menu {
+  display: flex;
+  gap: 25px;
+  position: relative;
+}
+.navbar .menu a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 5px 8px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.navbar .menu a:hover {
+  color: #ffcc00;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+}
+.navbar .menu:hover a:not(:hover) {
+  filter: blur(2px) brightness(70%);
+}
+
+.navbar .right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.reward {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+.reward img {
+  width: 20px;
+  height: 20px;
+}
+.profile img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* Content */
+.container {
+  margin-top: 50px;
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+}
+
+/* Game Box */
+.game-box {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 15px;
+  padding: 20px;
+  display: inline-block;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#objects {
+  font-size: 60px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#answerBox {
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid #aaa;
+  text-align: center;
+}
+
+.btn-row {
+  margin-top: 10px;
+}
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
+  background: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background: #388e3c;
+}
+
+#score {
+  font-size: 20px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* 🎉 Confetti */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Video preview */
+.video-preview {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 200px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  background: #000;
+  z-index: 20;
+}
+.video-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.navbar .menu a:hover .video-preview {
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="house.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+
+    <div class="menu">
+      <a href="front.html">
+        Home
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="challen.html">
+        Challenges
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix12.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="chal.html">
+        Games
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="less.html">
+        Lessons
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="pix5.mov" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="rewards.html">
+        Rewards
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="rewards.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+      <a href="help.html">
+        Help
+        <div class="video-preview">
+          <video autoplay muted loop playsinline>
+            <source src="help.mp4" type="video/mp4">
+          </video>
+        </div>
+      </a>
+    </div>
+
+    <div class="right">
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Gem">
+        <span>0</span>
+      </div>
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/138/138281.png" alt="Coin">
+        <span>0</span>
+      </div>
+      <div class="profile">
+        <img src="dp-cactus-20.png" alt="User">
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Section -->
+  <div class="container">
+    <h1>Counting Objects Game</h1>
+
+    <div class="game-box">
+      <p id="question">How many apples are there?</p>
+      <div id="objects"></div>
+
+      <input type="text" id="answerBox" placeholder="Type your answer" />
+
+      <div class="btn-row">
+        <button onclick="checkAnswer()">Submit</button>
+        <button onclick="speakNumber()">🔊 Speak</button>
+      </div>
+
+      <p id="score">Score: 0</p>
+    </div>
+  </div>
+
+  <!-- 🎉 Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <script src="counting.js"></script>
+</body>
+</html>
