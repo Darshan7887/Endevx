@@ -41,3 +41,10 @@ test*
 # Build / dist
 dist/
 build/
+# Allow curated UI assets
+!assets/
+!assets/images/
+!assets/images/*
+!assets/images/*.png
+!assets/images/*.jpg
+!assets/images/*.jpeg
