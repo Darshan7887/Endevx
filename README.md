@@ -59,8 +59,6 @@ BrainBerry is an interactive, voice-driven learning platform designed specifical
 ![WhatsApp Image 2026-03-18 at 10 31 30 PM](https://github.com/user-attachments/assets/b2c8f818-2e2f-4616-b2c0-0ce8913eb551)
 
 
-> *(Add more screenshots in `/assets/images` and update paths accordingly)*
-
 ---
 
 ## 🏗️ Tech Stack
