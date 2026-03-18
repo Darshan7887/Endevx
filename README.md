@@ -122,8 +122,7 @@ BrainBerry aims to:
 
 ## 👨‍💻 Author
 
-**Darshan Nerkar**
-Aspiring Cloud DevOps Engineer | AI Enthusiast
+**Darshan Jayant Nerkar** | **Parag Bharat Watane** | **Saurav Gajanan Patil** | **Avishkar Vijay Patil**
 
 ---
 
