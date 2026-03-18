@@ -51,11 +51,13 @@ BrainBerry is an interactive, voice-driven learning platform designed specifical
 
 ### 🏠 Landing Page
 
-![Landing Page](./assets/images/screenshot1.png)
+![WhatsApp Image 2026-03-18 at 10 24 04 PM](https://github.com/user-attachments/assets/d5b70201-0b0b-4d66-be43-2971b10180d3)
+
 
 ### 🎮 Dashboard & Lessons
 
-![Dashboard](./assets/images/screenshot2.png)
+![WhatsApp Image 2026-03-18 at 10 31 30 PM](https://github.com/user-attachments/assets/b2c8f818-2e2f-4616-b2c0-0ce8913eb551)
+
 
 > *(Add more screenshots in `/assets/images` and update paths accordingly)*
 
