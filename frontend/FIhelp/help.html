@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Boxes</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Funnel Display", sans-serif;
+      background: #f6f6f9;
+    }
+
+    /* Background video */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar .logo img {
+      width: 80px;
+      height: 55px;
+      border-radius: 6px;
+    }
+    .navbar .logo span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .navbar .menu {
+      display: flex;
+      gap: 25px;
+    }
+    .navbar .menu a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 5px 8px;
+      transition: all 0.3s ease;
+    }
+    .navbar .menu a:hover {
+      color: #ffcc00;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+    }
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .reward {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    .reward img {
+      width: 20px;
+      height: 20px;
+    }
+    .profile img {
+      width: 70px;
+      height: 55px;
+      border-radius: 50%;
+      border: 0px solid #fff;
+    }
+     /* Profile Sidebar */
+    .profile-sidebar {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 300px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 200;
+      color: #fff;
+    }
+    .profile-sidebar.active {
+      right: 0;
+    }
+    .profile-sidebar h2 {
+      margin-top: 0;
+      font-family: "Fugaz One", sans-serif;
+    }
+    .profile-sidebar p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    .profile-sidebar .close-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Main containers */
+    .boxes-container {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      width: 100%;
+      height: 100vh;
+      padding-top: 80px;
+      z-index: 10;
+    }
+
+    .glass-box {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 10px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #000;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .glass-box:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Left container */
+    .left-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 350px;
+    }
+    .left-container .glass-box {
+      height: 120px;
+    }
+
+    /* Right container */
+    .right-container {
+      width: 700px;
+    }
+    .right-container .glass-box {
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    /* Info content inside right container */
+    #info-content {
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="help.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="Screenshot 2025-09-14 134929.png" alt="Logo">
+      <span>BrainBerry</span>
+    </div>
+    <div class="menu">
+      <a href="front.html">Home</a>
+      <a href="#">Challenges</a>
+      <a href="chal.html">Games</a>
+      <a href="Less.html">Lessons</a>
+      <a href="rewards.html">Rewards</a>
+      <a href="help.html">Help</a>
+    </div>
+    <div class="right">
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Gem">
+        <span>0</span>
+      </div>
+      <div class="reward">
+        <img src="https://cdn-icons-png.flaticon.com/512/138/138281.png" alt="Coin">
+        <span>0</span>
+      </div>
+      <div class="profile">
+        <img src="dp-cactus-20.png" alt="User">
+      </div>
+    </div>
+  </div>
+   <!-- Sidebar for Profile -->
+<div id="profileSidebar" class="profile-sidebar">
+  <span class="close-btn" onclick="toggleProfile()">×</span>
+  <h2>User Profile</h2>
+  <p><strong>Name:</strong> <span id="profileName"></span></p>
+  <p><strong>Age:</strong> <span id="profileAge"></span></p>
+  <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+</div>
+
+    </div>
+  </div>
+  <!-- Main content -->
+  <div class="boxes-container">
+    <!-- Left: 4 Boxes -->
+      <!-- Left: 4 Boxes -->
+    <div class="left-container">
+      <div class="glass-box" data-info="We are a passionate team of students working on an inclusive learming platform designed especially for children with Specific Leaming Difficulties (SLDs). Our aim is to make education fun, voice- driven, and accessible for every child, no matter their background or challenges.
+
+Through interactive lessons in Alphabets,
+
+Numbers, Civic Sense, and Discipline, combined with voice-based learning and gamification, we help children learn at their own pace while building confidence and life skills.
+
+Our mission is simple:
+
+r "No child should be left behind because of learning difficulties,">
+        <img src="about us.jpg" alt="About Us" style="width:80px; height:80px; border-radius:10px; margin-bottom:8px;">
+        
+      </div>
+      <div class="glass-box" data-info="Contact Us : Email - sauravpatil0506@gmail.com Phone No : 8459165525">
+        <img src="contact us.jpg" alt="Box 2 Image" style="width:80px; height:80px; border-radius:10px; margin-bottom:8px;">
+        
+      </div>
+      <div class="glass-box" data-info="Info for Box 3">
+        <img src="feedback.jpg" alt="Box 3 Image" style="width:80px; height:80px; border-radius:10px; margin-bottom:8px;">
+        
+      </div>
+      <div class="glass-box" data-info="Info for Box 4">
+         <img src="news.jpg" alt="Box 3 Image" style="width:80px; height:80px; border-radius:10px; margin-bottom:8px;">
+      </div>
+    </div>
+
+
+    <!-- Right: Info Display -->
+    <div class="right-container">
+      <div class="glass-box">
+        <div id="info-content">
+          <h2>Hover or Click a Box</h2>
+          <p>The info will appear here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leftBoxes = document.querySelectorAll(".left-container .glass-box");
+    const infoContent = document.getElementById("info-content");
+    let locked = false; // track click lock
+ function toggleProfile() {
+    document.getElementById("profileSidebar").classList.toggle("active");
+  }
+
+  // ✅ Make profile image open sidebar
+  document.querySelector(".profile img").addEventListener("click", toggleProfile);
+    leftBoxes.forEach(box => {
+      // Show info on hover (only if not locked)
+      box.addEventListener("mouseenter", () => {
+        if (!locked) {
+          infoContent.innerHTML = `<h2>${box.textContent}</h2><p>${box.dataset.info}</p>`;
+        }
+      });
+
+      // Reset when mouse leaves (only if not locked)
+      box.addEventListener("mouseleave", () => {
+        if (!locked) {
+          infoContent.innerHTML = `<h2>Hover or Click a Box</h2><p>The info will appear here.</p>`;
+        }
+      });
+
+      // Lock info on click
+      box.addEventListener("click", () => {
+        locked = true;
+        infoContent.innerHTML = `<h2>${box.textContent} (Locked)</h2><p>${box.dataset.info}</p>`;
+      });
+    });
+
+    // Unlock on right-container click
+    document.querySelector(".right-container .glass-box").addEventListener("click", () => {
+      locked = false;
+      infoContent.innerHTML = `<h2>Hover or Click a Box</h2><p>The info will appear here.</p>`;
+    });
+
+  </script>
+</body>
+</html>

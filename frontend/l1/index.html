@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Say & Repeat — Kids Learning</title>
+  <style>
+    :root { --bg:#f7fbff; --card:#ffffff; --accent:#2b7cff; --good:#28a745; --bad:#dc3545; }
+
+    body {
+      margin:0;
+      font-family: "Funnel Display", Arial;
+      min-height:100vh;
+    }
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1; /* keeps it behind everything */
+    }
+
+    /* ====== Top Navigation Bar ====== */
+    .navbar {
+      background: rgba(75, 42, 173, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 500px;
+      color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar .menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar .menu a:hover {
+      text-decoration: underline;
+    }
+
+    /* Profile image */
+    .navbar .profile {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+      cursor: pointer;
+    }
+
+    /* ====== Learning Card ====== */
+    .card {
+      background:var(--card);
+      padding:28px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(20,30,70,0.08);
+      width:min(720px,94%);
+      text-align:center;
+      margin: 40px auto 0; /* sits below navbar */
+    }
+
+    h1 { margin:0 0 10px; font-size:28px; }
+    .target {
+      margin:20px auto;
+      font-size:84px;
+      font-weight:700;
+      color:var(--accent);
+      width:fit-content;
+      padding:12px 18px;
+      border-radius:12px;
+      background:rgba(43,124,255,0.07);
+    }
+    .controls {
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    button {
+      padding:10px 16px;
+      border-radius:10px;
+      border:0;
+      font-size:16px;
+      cursor:pointer;
+      box-shadow:0 6px 14px rgba(40,60,120,0.08);
+    }
+    .play { background:var(--accent); color:white; }
+    .listen { background:#ffd54f; }
+    .next { background:#6c757d; color:white; }
+    .status { margin-top:18px; font-size:18px; min-height:28px; }
+    .good { color:var(--good); font-weight:700; }
+    .bad { color:var(--bad); font-weight:700; }
+    .transcript { margin-top:8px; color:#333; font-style:italic; }
+    .small { font-size:13px; color:#666; margin-top:12px; }
+
+    /* ===== Score Styling ===== */
+    .score-box {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop class="bg-video">
+  <source src="r12.mov" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
+  <!-- Top Navigation -->
+  <div class="navbar">
+    <div class="menu">
+      <a href="#">Home</a>
+      <a href="#">Challenges</a>
+      <a href="#">Games</a>
+      <a href="#">Lessons</a>
+      <a href="#">Rewards</a>
+      <a href="#">Challenges</a>
+      <a href="#">Help</a>
+    </div>
+    <div class="profile">
+      <!-- Replace with your actual profile picture -->
+      <img src="bfc7be5a-7625-4273-b62a-a7798f6d3129.png" alt="User Profile" />
+    </div>
+  </div>
+
+  <!-- Learning Card -->
+  <div class="card" role="main" aria-live="polite">
+    <h1>Say & Repeat</h1>
+    <div class="small">Listen → Repeat → Get feedback</div>
+
+    <div id="target" class="target">A</div>
+
+    <div class="controls">
+      <button id="playBtn" class="play" title="Play the sound">🔊 Play</button>
+      <button id="listenBtn" class="listen" title="Start listening">🎤 Listen</button>
+      <button id="nextBtn" class="next" title="Next word">➡️ Next</button>
+    </div>
+
+    <div id="status" class="status"></div>
+    <div id="transcript" class="transcript"></div>
+
+    <!-- ✅ Score Box -->
+    <div class="score-box">Score: <span id="score">0</span></div>
+
+    <div class="small">Tip: Use Chrome for the best experience. Allow microphone access when asked.</div>
+  </div>
+
+  <script>
+    // Words/letters to practice
+    const items = [
+      {label: 'A', speak: 'A as in Apple'},
+      {label: 'B', speak: 'B as in Ball'},
+      {label: 'C', speak: 'C as in Cat'},
+      { label: 'A', speak: 'A as in Apple' },
+  { label: 'B', speak: 'B as in Ball' },
+  { label: 'C', speak: 'C as in Cat' },
+  { label: 'D', speak: 'D as in Dog' },
+  { label: 'E', speak: 'E as in Elephant' },
+  { label: 'F', speak: 'F as in Fish' },
+  { label: 'G', speak: 'G as in Grapes' },
+  { label: 'H', speak: 'H as in Hat' },
+  { label: 'I', speak: 'I as in Ice cream' },
+  { label: 'J', speak: 'J as in Jug' },
+  { label: 'K', speak: 'K as in Kite' },
+  { label: 'L', speak: 'L as in Lion' },
+  { label: 'M', speak: 'M as in Mango' },
+  { label: 'N', speak: 'N as in Nest' },
+  { label: 'O', speak: 'O as in Orange' },
+  { label: 'P', speak: 'P as in Parrot' },
+  { label: 'Q', speak: 'Q as in Queen' },
+  { label: 'R', speak: 'R as in Rabbit' },
+  { label: 'S', speak: 'S as in Sun' },
+  { label: 'T', speak: 'T as in Tiger' },
+  { label: 'U', speak: 'U as in Umbrella' },
+  { label: 'V', speak: 'V as in Van' },
+  { label: 'W', speak: 'W as in Watch' },
+  { label: 'X', speak: 'X as in Xylophone' },
+  { label: 'Y', speak: 'Y as in Yak' },
+  { label: 'Z', speak: 'Z as in Zebra' }
+    ];
+
+    let index = 0;
+    let score = 0; // ✅ Score variable
+
+    const targetEl = document.getElementById('target');
+    const statusEl = document.getElementById('status');
+    const transcriptEl = document.getElementById('transcript');
+    const playBtn = document.getElementById('playBtn');
+    const listenBtn = document.getElementById('listenBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const scoreEl = document.getElementById('score'); // ✅ score span
+
+    function showCurrent() {
+      targetEl.textContent = items[index].label;
+      statusEl.textContent = '';
+      transcriptEl.textContent = '';
+    }
+    showCurrent();
+
+    // Text-to-Speech
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        statusEl.textContent = 'Speech synthesis not supported in this browser.';
+        return;
+      }
+      const ut = new SpeechSynthesisUtterance(text);
+      ut.lang = 'en-US';
+      ut.rate = 0.95;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(ut);
+    }
+
+    playBtn.addEventListener('click', () => {
+      speakText(items[index].speak);
+    });
+
+    function normalize(s) {
+      return s.toLowerCase().replace(/[^a-z0-9\s]/gi, '').trim();
+    }
+
+    function levenshtein(a, b) {
+      if (a.length === 0) return b.length;
+      if (b.length === 0) return a.length;
+      const matrix = Array.from({length: b.length + 1}, (_, i) => [i]);
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          const cost = b[i - 1] === a[j - 1] ? 0 : 1;
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j - 1] + cost
+          );
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function isMatch(expected, heard) {
+      expected = normalize(expected);
+      heard = normalize(heard);
+      if (!heard) return false;
+      if (expected === heard) return true;
+      const dist = levenshtein(expected, heard);
+      const threshold = Math.max(1, Math.floor(expected.length * 0.3));
+      return dist <= threshold;
+    }
+
+    let recognition;
+    function createRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return null;
+      const r = new SpeechRecognition();
+      r.lang = 'en-US';
+      r.interimResults = false;
+      r.maxAlternatives = 3;
+      r.continuous = false;
+      return r;
+    }
+
+    recognition = createRecognition();
+
+    listenBtn.addEventListener('click', () => {
+      if (!recognition) {
+        statusEl.innerHTML = '<span class="bad">Speech recognition not supported in this browser.</span>';
+        return;
+      }
+      statusEl.textContent = 'Listening... (speak now)';
+      transcriptEl.textContent = '';
+      listenBtn.disabled = true;
+      playBtn.disabled = true;
+
+      recognition.onresult = (event) => {
+        const results = [];
+        for (let i = 0; i < event.results.length; i++) {
+          results.push(event.results[i][0].transcript);
+        }
+        const heard = results.join(' ').trim();
+        transcriptEl.textContent = 'Heard: "' + heard + '"';
+        const expectedText = items[index].label;
+        if (isMatch(expectedText, heard)) {
+          statusEl.innerHTML = '<span class="good">✅ Correct! Great job!</span>';
+          speakText('Very good! You said ' + expectedText);
+          
+          // ✅ Increase score
+          score += 30;
+          scoreEl.textContent = score;
+
+        } else {
+          statusEl.innerHTML = '<span class="bad">❌ Not quite. Try again!</span>';
+          speakText('Try again. Say: ' + expectedText);
+        }
+      };
+
+      recognition.onerror = (e) => {
+        statusEl.innerHTML = '<span class="bad">Error: ' + (e.error || 'recognition error') + '</span>';
+      };
+
+      recognition.onend = () => {
+        listenBtn.disabled = false;
+        playBtn.disabled = false;
+        if (!statusEl.textContent) statusEl.textContent = 'Stopped listening.';
+      };
+
+      try {
+        recognition.start();
+      } catch (err) {
+        console.warn(err);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index = (index + 1) % items.length;
+      showCurrent();
+      speakText(items[index].speak);
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => speakText(items[index].speak), 350);
+    });
+  </script>
+</body>
+</html>
+
